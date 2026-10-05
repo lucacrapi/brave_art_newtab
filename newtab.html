@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nouvel onglet</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="src/newtab.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="top-bar">
+        <section class="time-block" aria-live="polite">
+          <div class="clock-row">
+            <span class="clock" id="clock">--:--</span>
+            <span class="period" id="period"></span>
+          </div>
+          <div class="date" id="date"></div>
+        </section>
+
+        <div class="toggle-group">
+          <button class="settings-toggle" id="historyToggle" type="button" aria-label="Historique et favoris">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <button class="settings-toggle" id="settingsToggle" type="button" aria-label="Reglages du fond">
+            <span aria-hidden="true">⚙</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="search-zone" aria-label="Recherche">
+        <form class="search" id="searchForm" role="search">
+          <label class="sr-only" for="searchInput">Recherche ou adresse</label>
+          <span class="search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+          </span>
+          <input id="searchInput" name="q" autocomplete="off" spellcheck="false" placeholder="Ask anything, find anything...">
+          <button class="search-submit" type="submit" aria-label="Rechercher"></button>
+        </form>
+      </section>
+
+      <section class="bottom-info" aria-label="Informations">
+        <div class="left-info">
+          <div class="credit-row">
+            <a class="photo-credit" id="photoCredit" target="_blank" rel="noreferrer">Fond personnalise</a>
+            <div class="feedback-buttons">
+              <button class="feedback-button" id="likeButton" type="button" aria-label="Garder cette oeuvre dans mes favoris" hidden>♥</button>
+              <button class="feedback-button" id="favoriteArtistButton" type="button" aria-label="Ajouter l'artiste a mes favoris" hidden>☆</button>
+              <button class="feedback-button" id="freezeButton" type="button" aria-label="Figer cette image comme fond d'ecran" aria-pressed="false" hidden>❄</button>
+              <button class="feedback-button" id="reloadButton" type="button" aria-label="Charger une autre image" hidden>↻</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="settings-panel" id="settingsPanel" aria-label="Reglages" hidden>
+        <div class="panel-header">
+          <h1>Administration</h1>
+          <button id="closeSettings" type="button" aria-label="Fermer">x</button>
+        </div>
+
+        <section class="admin-section">
+          <h2>Source d'images</h2>
+          <label class="check-row">
+            <input id="commonsSourceInput" type="checkbox" checked disabled>
+            <span>Wikimedia Commons</span>
+          </label>
+        </section>
+
+        <section class="admin-section">
+          <h2>Musees</h2>
+          <div class="weight-grid" id="museumSources"></div>
+        </section>
+
+        <section class="admin-section">
+          <h2>Autres sources (Commons)</h2>
+          <div class="weight-grid" id="legacySources"></div>
+        </section>
+
+        <section class="admin-section">
+          <h2>Styles</h2>
+          <div class="weight-grid" id="styles"></div>
+        </section>
+
+        <section class="admin-section">
+          <h2>Themes</h2>
+          <div class="weight-grid" id="themes"></div>
+        </section>
+
+        <section class="admin-section">
+          <label class="control">
+            <span>Images par recherche</span>
+            <input id="poolSizeInput" type="range" min="10" max="100" step="10">
+          </label>
+          <button class="secondary" id="rebuildPool" type="button">Actualiser la liste d'images</button>
+          <button class="secondary" id="refreshSource" type="button">Nouvelle image</button>
+          <p class="status-line" id="adminStatus" role="status"></p>
+        </section>
+
+        <section class="admin-section">
+          <h2>Affichage</h2>
+          <div class="segmented" role="radiogroup" aria-label="Mode d'affichage">
+            <label>
+              <input type="radio" name="fitMode" value="cover">
+              <span>Crop</span>
+            </label>
+            <label>
+              <input type="radio" name="fitMode" value="contain">
+              <span>Full</span>
+            </label>
+            <label>
+              <input type="radio" name="fitMode" value="100% 100%">
+              <span>Etirer</span>
+            </label>
+            <label>
+              <input type="radio" name="fitMode" value="auto">
+              <span>Original</span>
+            </label>
+          </div>
+
+          <label class="control">
+            <span>Position</span>
+            <select id="positionInput">
+              <option value="center">Centre</option>
+              <option value="top center">Haut</option>
+              <option value="bottom center">Bas</option>
+              <option value="left center">Gauche</option>
+              <option value="right center">Droite</option>
+            </select>
+          </label>
+        </section>
+
+        <label class="control">
+          <span>Assombrir</span>
+          <input id="dimInput" type="range" min="0" max="80" step="1">
+        </label>
+
+        <label class="control">
+          <span>Flou</span>
+          <input id="blurInput" type="range" min="0" max="24" step="1">
+        </label>
+
+        <section class="admin-section">
+          <h2>Horloge</h2>
+          <label class="check-row">
+            <input id="showSecondsInput" type="checkbox">
+            <span>Afficher les secondes</span>
+          </label>
+        </section>
+      </aside>
+
+      <aside class="settings-panel history-panel" id="historyPanel" aria-label="Historique et favoris" hidden>
+        <div class="panel-header">
+          <h1>Historique &amp; favoris</h1>
+          <button id="closeHistory" type="button" aria-label="Fermer">x</button>
+        </div>
+
+        <div class="view-tabs" id="historyTabs" role="tablist" aria-label="Choisir la liste a afficher">
+          <button type="button" data-view="history" role="tab" aria-selected="true">Historique</button>
+          <button type="button" data-view="liked" role="tab" aria-selected="false">Appreciees</button>
+          <button type="button" data-view="artists" role="tab" aria-selected="false">Artistes</button>
+        </div>
+        <ul class="history-list" id="historyList"></ul>
+      </aside>
+    </main>
+
+    <script src="src/newtab.js"></script>
+  </body>
+</html>
