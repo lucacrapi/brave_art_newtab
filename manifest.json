@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Brave Wallpaper New Tab",
-  "version": "0.1.0",
+  "version": "1",
   "description": "Remplace le nouvel onglet par une page simple avec fond personnalisable.",
   "chrome_url_overrides": {
     "newtab": "newtab.html"
